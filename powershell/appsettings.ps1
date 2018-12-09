@@ -1,6 +1,14 @@
 Select-AzureRmSubscription devops
 $RGName = 'devops-arm-test'
 $appName = 'esw-testfunc'
+$predefinedSettings =@( 'FUNCTIONS_WORKER_RUNTIME', 
+                        'AzureWebJobsStorage',
+                        'FUNCTIONS_EXTENSION_VERSION',
+                        'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING',
+                        'WEBSITE_CONTENTSHARE',
+                        'WEBSITE_NODE_DEFAULT_VERSION')
+
+$funcSettings = Get-Content ./settings.json | ConvertFrom-Json
 
 $webapp = Get-AzureRmWebApp -ResourceGroupName $RGName -Name $appName
 
