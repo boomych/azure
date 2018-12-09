@@ -1,16 +1,37 @@
+[System.Reflection.Assembly]::LoadWithPartialName("System.Web.Extensions")
+Function Parse-JsonFile {
+    [CmdletBinding()]
+    [OutputType('hashtable')]
+    param (
+        [Parameter(ValueFromPipeline)]
+        $json
+    )
+    $parser = New-Object Web.Script.Serialization.JavaScriptSerializer
+    $parser.MaxJsonLength = $json.length
+    Write-Output -NoEnumerate $parser.Deserialize($json, @{}.GetType())
+}
+
+
 Select-AzureRmSubscription devops
 $RGName = 'devops-arm-test'
 $appName = 'esw-testfunc'
-$predefinedSettings =@( 'FUNCTIONS_WORKER_RUNTIME', 
-                        'AzureWebJobsStorage',
-                        'FUNCTIONS_EXTENSION_VERSION',
-                        'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING',
-                        'WEBSITE_CONTENTSHARE',
-                        'WEBSITE_NODE_DEFAULT_VERSION')
-
-$funcSettings = Get-Content ./settings.json | ConvertFrom-Json
+$predefinedSettings = @( 'FUNCTIONS_WORKER_RUNTIME', 
+    'AzureWebJobsStorage',
+    'FUNCTIONS_EXTENSION_VERSION',
+    'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING',
+    'WEBSITE_CONTENTSHARE',
+    'WEBSITE_NODE_DEFAULT_VERSION')
 
 $webapp = Get-AzureRmWebApp -ResourceGroupName $RGName -Name $appName
+$appSettings = $webapp.SiteConfig.AppSettings
+$funcSettings = (Get-Content ./powershell/settings.json | Parse-JsonFile).Values
+    
+
+$funcSettings.keys
+
+
+
+
 
 <#
 $props = (Invoke-AzureResourceAction -ResourceGroupName $myResourceGroup `
