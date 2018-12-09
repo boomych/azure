@@ -11,7 +11,7 @@ Function Parse-JsonFile {
     Write-Output -NoEnumerate $parser.Deserialize($json, @{}.GetType())
 }
 
-
+#login-AzureRmAccount
 Select-AzureRmSubscription devops
 $RGName = 'devops-arm-test'
 $appName = 'esw-testfunc'
@@ -24,10 +24,9 @@ $predefinedSettings = @( 'FUNCTIONS_WORKER_RUNTIME',
 
 $webapp = Get-AzureRmWebApp -ResourceGroupName $RGName -Name $appName
 $appSettings = $webapp.SiteConfig.AppSettings
-$funcSettings = (Get-Content ./powershell/settings.json | Parse-JsonFile).Values
+$funcSettings = (Get-Content -Raw -Path ./powershell/settings.json | Parse-JsonFile).Values
     
-
-$funcSettings.keys
+Foreach
 
 
 
