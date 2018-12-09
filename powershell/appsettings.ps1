@@ -1,12 +1,10 @@
-$RGName = ''
+Select-AzureRmSubscription devops
+$RGName = 'devops-arm-test'
+$appName = 'esw-testfunc'
 
-Switch-AzureMode AzureResourceManager
-Get-AzureAccount
+$webapp = Get-AzureRmWebApp -ResourceGroupName $RGName -Name $appName
 
-(Invoke-AzureResourceAction -ResourceGroupName $myResourceGroup `
- -ResourceType Microsoft.Web/sites/Config -Name $mySite/appsettings `
- -Action list -ApiVersion 2015-08-01 -Force).Properties
-
+<#
 $props = (Invoke-AzureResourceAction -ResourceGroupName $myResourceGroup `
  -ResourceType Microsoft.Web/sites/Config -Name $mySite/appsettings `
  -Action list -ApiVersion 2015-08-01 -Force).Properties
@@ -19,3 +17,4 @@ $hash.ExistingKey = "NewValue"
 
 Switch-AzureMode AzureServiceManagement
 Set-AzureWebsite -Name $mySite -AppSettings $hash
+#>
